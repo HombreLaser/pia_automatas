@@ -104,7 +104,7 @@ class ProgramLexer(Lexer):
 
         while (self.current not in NEWLINE and self.current != ' ' and self.current is not None):
             # Checamos que el caracter no sea una mayúscula.
-            if self.current.isupper():
+            if self.current.isupper() or not self.current.isalnum():
                 raise InvalidTokenError(self.current)
 
             id += self.current
