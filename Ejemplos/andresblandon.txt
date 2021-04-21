@@ -1,0 +1,12 @@
+programa andresblandon;
+iniciar
+leer variable1;
+leer reloj;
+leer arena;
+leer variable3;
+imprimir reloj;
+a := reloj-(-(32*arena)/(23-85*38));
+b := arena*a^(reloj*5);
+c := variable3+b*(variable1*-(32-25));
+imprimir c;
+terminar.

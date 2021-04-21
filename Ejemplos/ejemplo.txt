@@ -1,0 +1,9 @@
+programa final12;
+iniciar
+leer valor1;
+leer valor2;
+leer valor3;
+leer jota;
+q := (valor1*valor2/(valor3/300);
+t := 30*(jota-q);
+terminar.

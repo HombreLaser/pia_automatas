@@ -1,0 +1,8 @@
+programa opsincorrectas;
+iniciar
+t2 := -+;
+t3 := b/;
+t4 := (54+t3/t2;
+t5 := (ab-(df*43);
+imprimir t5;
+terminar.

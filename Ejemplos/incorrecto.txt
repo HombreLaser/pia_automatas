@@ -1,0 +1,4 @@
+programa incorrecto;
+iniciar
+imprimir ;
+terminar.
