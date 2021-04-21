@@ -1,0 +1,9 @@
+programa ejemplo2;
+iniciar
+imprimir b;
+leer i;
+var2 := i+(c*2)/numero^3;
+imprimir var2;
+key := 45/0;
+imprimir d;
+terminar.
