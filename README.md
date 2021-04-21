@@ -1,2 +1,3 @@
 # pia_automatas
-PIA Autómatas
+Proyecto Integrador de Aprendizaje de Teoría de Autómatas
+UANL - FCFM LCC 4to Semestre con el profesor Yazmany Jahaziel Guerrero Ceja
