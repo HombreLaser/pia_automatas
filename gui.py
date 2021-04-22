@@ -75,9 +75,6 @@ class App:
         parser = ProgramParser(lexer.generate_tokens())
         try:
             result = parser.parse()
-        except AttributeError:
-            self.write_text("Sintaxis Incorrecta", self.output_text)
-            return False
         except InvalidSyntax as e:
             result = e.message
 
