@@ -2,6 +2,9 @@ from execution_exceptions import *
 from tokens import TokenType, Token
 from lexer import ArithmeticLexer
 
+# Mensajes de error misceláneos.
+UNEXPECTED = "Se encontró un elemento inesperado."
+
 
 class Parser:
     """
@@ -16,10 +19,16 @@ class Parser:
         self.tokens = iter(tokens)
         self.next_token()
 
+    # Para checar que no haya errores en el lexer.
+    def check_token(self):
+        if self.current_token is None:
+            return False
+
     def next_token(self):
         try:
             self.current_token = next(self.tokens)
         except StopIteration:
+            
             self.current_token = None
         # Cualquier otro error en el lexer.
         except (EOFScanning, FileNameError, NewlineError, InvalidTokenError) as e:
@@ -27,10 +36,9 @@ class Parser:
             self.current_token = None
 
     def parse_id(self):
-        # De expresiones.
         if self.current_token is None or self.current_token.type != TokenType.ID:
             raise InvalidSyntax(self.error_log())
-        #Este en cambio, sí, pero no amerita detener la ejecución del
+        # Este en cambio, sí, pero no amerita detener la ejecución del
         # análisis.
         if self.current_token.value not in self.symbol_table:
             self.output += f"Aviso: uso de variable sin inicializar: {self.current_token.value}.\n"
@@ -69,12 +77,17 @@ class ProgramParser(Parser):
             return self.output
         
         if self.current_token.type == TokenType.NAME_FIELD:
-            self.next_token()
+
+            if not self.next_token():
+                raise InvalidSyntax(UNEXPECTED)
 
             if self.current_token.type != TokenType.NAME:
                 raise InvalidSyntax(self.error_log())
 
             self.next_token()
+
+            if not self.next_token():
+                raise InvalidSyntax(UNEXPECTED)
 
             if self.current_token.type == TokenType.START:
                 try:
@@ -106,7 +119,7 @@ class ProgramParser(Parser):
             tokens = lexer.generate_tokens()
         except InvalidTokenError as e:
             self.output += e.message
-            return
+            return False
 
         expr_parser = ArithmeticParser(expr, self.symbol_table, tokens)
 
