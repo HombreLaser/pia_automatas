@@ -42,19 +42,19 @@ class ProgramLexer(Lexer):
             elif self.current.islower() or self.current == ' ':
                 # Checamos primero las palabras
                 # reservadas.
-                if self.text[self.pointer:self.pointer + len("programa")] == "programa":
-                    self.next_char(advance=len("programa") + 1)
+                if self.text[self.pointer:self.pointer + len("programa ")] == "programa ":
+                    self.next_char(advance=len("programa "))
                     yield Token(TokenType.NAME_FIELD)
                     yield self.generate_name()
                     self.check_newline()
-                elif self.text[self.pointer:self.pointer + len("iniciar")] == "iniciar":
-                    self.next_char(advance=len("iniciar") + 1)
+                elif self.text[self.pointer:self.pointer + len("iniciar ")] == "iniciar ":
+                    self.next_char(advance=len("iniciar "))
                     yield Token(TokenType.START)
-                elif self.text[self.pointer:self.pointer + len("leer")] == "leer":
-                    self.next_char(advance=len("leer") + 1)
+                elif self.text[self.pointer:self.pointer + len("leer ")] == "leer ":
+                    self.next_char(advance=len("leer "))
                     yield Token(TokenType.READ)
-                elif self.text[self.pointer:self.pointer + len("imprimir")] == "imprimir":
-                    self.next_char(advance=len("imprimir") + 1)
+                elif self.text[self.pointer:self.pointer + len("imprimir ")] == "imprimir ":
+                    self.next_char(advance=len("imprimir "))
                     yield Token(TokenType.PRINT)
                 elif self.text[self.pointer:self.pointer + len("terminar.")] == "terminar.":
                     self.next_char(advance=len("terminar."))
