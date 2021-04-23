@@ -24,11 +24,12 @@ class Parser:
         if self.current_token is None:
             return False
 
+        return True
+
     def next_token(self):
         try:
             self.current_token = next(self.tokens)
         except StopIteration:
-            
             self.current_token = None
         # Cualquier otro error en el lexer.
         except (EOFScanning, FileNameError, NewlineError, InvalidTokenError) as e:
@@ -73,12 +74,13 @@ class ProgramParser(Parser):
     def parse(self):
         # Si el token actual es None, ocurrió un error
         # durante el análisis léxico.
-        if self.current_token is None:
+        if not self.check_token():
             return self.output
         
         if self.current_token.type == TokenType.NAME_FIELD:
-
-            if not self.next_token():
+            self.next_token()
+            
+            if not self.check_token():
                 raise InvalidSyntax(UNEXPECTED)
 
             if self.current_token.type != TokenType.NAME:
@@ -86,7 +88,7 @@ class ProgramParser(Parser):
 
             self.next_token()
 
-            if not self.next_token():
+            if not self.check_token():
                 raise InvalidSyntax(UNEXPECTED)
 
             if self.current_token.type == TokenType.START:

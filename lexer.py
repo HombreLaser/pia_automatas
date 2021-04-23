@@ -47,8 +47,8 @@ class ProgramLexer(Lexer):
                     yield Token(TokenType.NAME_FIELD)
                     yield self.generate_name()
                     self.check_newline()
-                elif self.text[self.pointer:self.pointer + len("iniciar ")] == "iniciar ":
-                    self.next_char(advance=len("iniciar "))
+                elif self.text[self.pointer:self.pointer + len("iniciar")] == "iniciar":
+                    self.next_char(advance=len("iniciar"))
                     yield Token(TokenType.START)
                 elif self.text[self.pointer:self.pointer + len("leer ")] == "leer ":
                     self.next_char(advance=len("leer "))
