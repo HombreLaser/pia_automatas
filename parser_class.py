@@ -25,11 +25,12 @@ class Parser:
             return False
 
         return True
-
+    
     def next_token(self):
         try:
             self.current_token = next(self.tokens)
         except StopIteration:
+            
             self.current_token = None
         # Cualquier otro error en el lexer.
         except (EOFScanning, FileNameError, NewlineError, InvalidTokenError) as e:
