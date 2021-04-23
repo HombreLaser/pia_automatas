@@ -135,6 +135,10 @@ class ProgramParser(Parser):
         while self.current_token is not None and self.current_token.type != TokenType.END:
             if self.current_token.type == TokenType.READ:
                 self.next_token()
+
+                if not self.check_token():
+                    raise InvalidSyntax("Errores en lectura de tokens.")
+                    
                 if self.current_token.type == TokenType.ID:
                     # Agregamos a la tabla de símbolos el
                     # identificador inicializado.
