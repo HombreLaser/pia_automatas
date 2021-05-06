@@ -139,7 +139,7 @@ class ProgramParser(Parser):
 
                 if not self.check_token():
                     return False
-
+            
                 if self.current_token.type == TokenType.ID:
                     # Agregamos a la tabla de símbolos el
                     # identificador inicializado.
