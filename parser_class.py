@@ -3,7 +3,7 @@ from tokens import TokenType, Token
 from lexer import ArithmeticLexer
 
 # Mensajes de error misceláneos.
-UNEXPECTED = "Se encontró un elemento inesperado."
+# UNEXPECTED = "Se encontró un elemento inesperado."
 
 
 class Parser:
@@ -82,7 +82,7 @@ class ProgramParser(Parser):
             self.next_token()
             
             if not self.check_token():
-                raise InvalidSyntax(UNEXPECTED)
+                return self.output
 
             if self.current_token.type != TokenType.NAME:
                 raise InvalidSyntax(self.error_log())
@@ -90,12 +90,13 @@ class ProgramParser(Parser):
             self.next_token()
 
             if not self.check_token():
-                raise InvalidSyntax(UNEXPECTED)
+                return self.output
 
             if self.current_token.type == TokenType.START:
                 try:
                     self.next_token()
-                    self.parse_sentence()
+                    if not self.parse_sentence():
+                        return self.output
                 except (InvalidSyntax, EOFScanning) as e:
                     self.output += e.message
                     return self.output
@@ -137,8 +138,8 @@ class ProgramParser(Parser):
                 self.next_token()
 
                 if not self.check_token():
-                    raise InvalidSyntax("Errores en lectura de tokens.")
-                    
+                    return False
+            
                 if self.current_token.type == TokenType.ID:
                     # Agregamos a la tabla de símbolos el
                     # identificador inicializado.
@@ -202,7 +203,7 @@ class ArithmeticParser(Parser):
         # Si no se consumieron todos los tokens
         # de la expresión hubo errores.
         if self.current_token is not None:
-            raise InvalidSyntax(self.expr)
+            return "Sintaxis inválida: " + self.expr
 
         return self.output
 
@@ -282,13 +283,15 @@ class ArithmeticParser(Parser):
         # Si el token es None en este punto significa que se quedó
         # esperando un factor, pero no hay nada. Expresiones de la
         # forma a+
-        if self.current_token is None:
+        if not self.check_token():
             return False
         
         if self.current_token.type == TokenType.SUBSTRACTION:
             self.next_token()
 
-            if not self.parse_expr():
+            try:
+                self.parse_expr()
+            except InvalidSyntax as e:
                 return False
 
             return True

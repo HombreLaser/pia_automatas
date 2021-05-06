@@ -83,19 +83,17 @@ class ProgramLexer(Lexer):
         return Token(TokenType.EXPR, expression)
 
     def generate_name(self):
-        if self.current.isalpha() and not self.current.isupper():
-            name = self.current
-            self.next_char()
-        else:
-            raise FileNameError(name + self.current)
+        name = self.current
+        self.next_char()
 
         while (self.current is not None and self.current not in NEWLINE and
                self.current.islower() or self.current.isnumeric()):
             name += self.current
             self.next_char()
 
-        if self.current is None or self.current.isupper():
-            raise FileNameError(name + self.current)
+        if (self.current is None or self.current.isupper() or
+            not name.isalnum()):
+            raise FileNameError(name)
             
         return Token(TokenType.NAME, name)
 
