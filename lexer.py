@@ -29,7 +29,7 @@ class Lexer:
 
 class ProgramLexer(Lexer):
     """
-    Analizador léxico del código fuente 
+    Analizador léxico del código fuente
     de algún programa.
     """
     def __init__(self, text):
@@ -84,6 +84,7 @@ class ProgramLexer(Lexer):
 
     def generate_name(self):
         name = self.current
+            
         self.next_char()
 
         while (self.current is not None and self.current not in NEWLINE and
@@ -92,7 +93,7 @@ class ProgramLexer(Lexer):
             self.next_char()
 
         if (self.current is None or self.current.isupper() or
-            not name.isalnum()):
+            not name.isalnum() or not name[0].isalpha()):
             raise FileNameError(name)
             
         return Token(TokenType.NAME, name)
@@ -109,7 +110,7 @@ class ProgramLexer(Lexer):
             self.next_char()
 
         if self.current == ' ':
-            if (next_c := self.text[self.pointer + 1]) == ' ' or next_c in NEWLINE:
+            if (next_c := self.text[self.pointer + 1]) == ' ' or next_c in NEWLINE or not id:
                 raise InvalidTokenError(self.current)
 
         if self.current in NEWLINE:
@@ -125,7 +126,7 @@ class ProgramLexer(Lexer):
 
 class ArithmeticLexer(Lexer):
     """
-    Analizador léxico de expresiones 
+    Analizador léxico de expresiones
     aritméticas.
     """
     operators = {'-', '+', '*', '/', '^', '(', ')'}
