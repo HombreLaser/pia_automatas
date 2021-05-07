@@ -37,12 +37,17 @@ class Parser:
             self.current_token = None
 
     def parse_id(self):
-        if self.current_token is None or self.current_token.type != TokenType.ID:
+        if ((previous_error := self.current_token is None) or self.current_token.type != TokenType.ID):
+            if previous_error:
+                return False
+
             raise InvalidSyntax(self.error_log())
         # Este en cambio, sí, pero no amerita detener la ejecución del
         # análisis.
         if self.current_token.value not in self.symbol_table:
             self.output += f"Aviso: uso de variable sin inicializar: {self.current_token.value}.\n"
+
+        return True
 
     # Pequeña función para regresar en que símbolo falló el parser.
     def error_log(self):
@@ -150,7 +155,10 @@ class ProgramParser(Parser):
 
             elif self.current_token.type == TokenType.PRINT:
                 self.next_token()
-                self.parse_id()
+
+                if not self.check_token() or not self.parse_id():
+                    return False
+
                 self.next_token()
             elif self.current_token.type == TokenType.ID:
                 self.symbol_table.append(self.current_token.value)
