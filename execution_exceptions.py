@@ -21,7 +21,7 @@ class EOFScanning(LexerError):
 class FileNameError(LexerError):
     def __init__(self, filename):
         self.filename = filename
-        self.message = "Nombre de archivo inválido: " + self.filename + "\n"
+        self.message = "Nombre de programa inválido: " + self.filename + "\n"
 
 class NewlineError(LexerError):
     def __init__(self):

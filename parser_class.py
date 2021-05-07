@@ -9,7 +9,7 @@ from lexer import ArithmeticLexer
 class Parser:
     """
     Superclase parser. Los atributos que comparten todos los
-    parsers son la salida del análisis y los tokens del texto de entrada. 
+    parsers son la salida del análisis y los tokens del texto de entrada.
     Los método que todos los parsers comparten es el de pedir el próximo token,
     el de analizar el token identificador y el de hacer un log de fallos.
     """
@@ -30,7 +30,6 @@ class Parser:
         try:
             self.current_token = next(self.tokens)
         except StopIteration:
-            
             self.current_token = None
         # Cualquier otro error en el lexer.
         except (EOFScanning, FileNameError, NewlineError, InvalidTokenError) as e:
@@ -47,8 +46,8 @@ class Parser:
 
     # Pequeña función para regresar en que símbolo falló el parser.
     def error_log(self):
-        types = {TokenType.READ: "leer", TokenType.PRINT:"imprimir", TokenType.END:"terminar.",
-                 TokenType.START:"iniciar", TokenType.NAME_FIELD:"programa"}
+        types = {TokenType.READ: "leer", TokenType.PRINT: "imprimir", TokenType.END: "terminar.",
+                 TokenType.START: "iniciar", TokenType.NAME_FIELD: "programa"}
 
         if self.current_token.type in types:
             return types[self.current_token.type]
@@ -61,7 +60,7 @@ class Parser:
 # excepto la falta de los saltos de línea.
 class ProgramParser(Parser):
     """
-    La clase de nuestro analizador sintáctico. Tiene como 
+    La clase de nuestro analizador sintáctico. Tiene como
     variables globales los operadores y como atributos
     la salida del análisis, la tabla de símbolos donde
     se encuentran las variables inicializadas y una lista
@@ -95,6 +94,7 @@ class ProgramParser(Parser):
             if self.current_token.type == TokenType.START:
                 try:
                     self.next_token()
+
                     if not self.parse_sentence():
                         return self.output
                 except (InvalidSyntax, EOFScanning) as e:
@@ -139,7 +139,7 @@ class ProgramParser(Parser):
 
                 if not self.check_token():
                     return False
-            
+
                 if self.current_token.type == TokenType.ID:
                     # Agregamos a la tabla de símbolos el
                     # identificador inicializado.
@@ -147,6 +147,7 @@ class ProgramParser(Parser):
                     self.next_token()
                 else:
                     raise InvalidSyntax(self.error_log())
+
             elif self.current_token.type == TokenType.PRINT:
                 self.next_token()
                 self.parse_id()
@@ -155,8 +156,14 @@ class ProgramParser(Parser):
                 self.symbol_table.append(self.current_token.value)
                 self.next_token()
 
+                if not self.check_token():
+                    return False
+
                 if self.current_token.type == TokenType.EQUALS:
                     self.next_token()
+
+                    if not self.check_token():
+                        return False
 
                     if self.current_token.type != TokenType.EXPR:
                         raise InvalidSyntax(self.current_token.value)
@@ -243,7 +250,7 @@ class ArithmeticParser(Parser):
                     self.output += "Aviso: División entre cero.\n"
                 if not self.parse_power():
                     return False
-                
+
                 if not self.parse_prime_term():
                     return False
 
@@ -285,7 +292,7 @@ class ArithmeticParser(Parser):
         # forma a+
         if not self.check_token():
             return False
-        
+
         if self.current_token.type == TokenType.SUBSTRACTION:
             self.next_token()
 
@@ -319,7 +326,7 @@ class ArithmeticParser(Parser):
 
             if is_id:
                 self.parse_id()
-                
+
             self.next_token()
 
             return True

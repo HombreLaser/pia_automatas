@@ -82,7 +82,7 @@ class App:
         sans_newlines.lstrip("\n")
 
         # Hubo errores.
-        if sans_newlines: 
+        if sans_newlines:
             self.write_text(result, self.output_text)  
         else:
             self.write_text("Programa correcto", self.output_text)
