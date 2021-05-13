@@ -71,6 +71,10 @@ class App:
             messagebox.showerror("Error", "No se ha especificado archivo de entrada.")
             return False
 
+        # Si el archivo de entrada está vacío...
+        if not self.text:
+            self.write_text("Archivo inválido", self.output_text)
+
         lexer = ProgramLexer(self.text)
         parser = ProgramParser(lexer.generate_tokens())
         try:
@@ -78,14 +82,7 @@ class App:
         except InvalidSyntax as e:
             result = e.message
 
-        sans_newlines = result
-        sans_newlines.lstrip("\n")
-
-        # Hubo errores.
-        if sans_newlines:
-            self.write_text(result, self.output_text)  
-        else:
-            self.write_text("Programa correcto", self.output_text)
+        self.write_text(result, self.output_text)
 
     def write_text(self, text, text_box):
         text_box.delete('0.0', tk.END)

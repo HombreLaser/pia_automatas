@@ -2,9 +2,6 @@ from execution_exceptions import *
 from tokens import TokenType, Token
 from lexer import ArithmeticLexer
 
-# Mensajes de error misceláneos.
-# UNEXPECTED = "Se encontró un elemento inesperado."
-
 
 class Parser:
     """
@@ -108,22 +105,28 @@ class ProgramParser(Parser):
             else:
                 raise InvalidSyntax(self.error_log())
 
-            if self.current_token.type == TokenType.END:
-                self.next_token()
+            self.next_token()
 
-                # Se supone que ya debimos haber consumido
-                # todos los tokens en caso de que la entrada
-                # sea correcta.
-                if self.current_token is None:
+            # Se supone que ya debimos haber consumido
+            # todos los tokens en caso de que la entrada
+            # sea correcta.
+            if self.current_token is None:
+                if self.output.strip('\n'):
                     return self.output
 
-                return f"Sintaxis inválida: {self.error_log()}\n"
+                return "Programa correcto."
+
+            return f"Sintaxis inválida: {self.error_log()}\n"
         else:
             return f"Sintaxis inválida: {self.error_log()}\n"
 
     def parse_expr(self, expr):
-        lexer = ArithmeticLexer(expr)
+        if not expr:
+            self.output += "Error: expresión vacía.\n"
+            return False
 
+        lexer = ArithmeticLexer(expr)
+        
         try:
             tokens = lexer.generate_tokens()
         except InvalidTokenError as e:
@@ -186,6 +189,8 @@ class ProgramParser(Parser):
         if self.current_token is None:
             raise EOFScanning()
 
+        return True
+
 
 class ArithmeticParser(Parser):
     """
@@ -209,7 +214,7 @@ class ArithmeticParser(Parser):
     def parse(self):
         if self.current_token is None:
             return self.output
-
+        
         try:
             self.parse_expr()
         except InvalidSyntax as e:
